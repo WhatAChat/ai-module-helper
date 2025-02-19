@@ -1,25 +1,20 @@
 
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface ModuleCardProps {
   title: string;
   description: string;
   progress?: number;
-  isSelected?: boolean;
-  onClick?: () => void;
 }
 
-export function ModuleCard({ 
-  title, 
-  description, 
-  progress = 0,
-  isSelected = false,
-  onClick 
-}: ModuleCardProps) {
+export function ModuleCard({ title, description, progress = 0 }: ModuleCardProps) {
+  const navigate = useNavigate();
+
   return (
     <Card 
-      className={`hover-card cursor-pointer ${isSelected ? 'ring-2 ring-primary' : ''}`}
-      onClick={onClick}
+      className="hover-card cursor-pointer"
+      onClick={() => navigate(`/module/${encodeURIComponent(title)}`)}
     >
       <CardHeader>
         <CardTitle className="text-lg">{title}</CardTitle>
