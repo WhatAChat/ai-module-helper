@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { ModuleCard } from "@/components/modules/ModuleCard";
 import { AIChat } from "@/components/ai/AIChat";
@@ -23,6 +24,8 @@ const modules = [
 ];
 
 const Index = () => {
+  const [selectedModule, setSelectedModule] = useState<string | null>(null);
+
   return (
     <AppLayout>
       <div className="space-y-8 animate-fade-in">
@@ -38,14 +41,29 @@ const Index = () => {
             <h2 className="text-xl font-semibold">Your Modules</h2>
             <div className="grid gap-4">
               {modules.map((module) => (
-                <ModuleCard key={module.title} {...module} />
+                <ModuleCard 
+                  key={module.title} 
+                  {...module} 
+                  isSelected={selectedModule === module.title}
+                  onClick={() => setSelectedModule(module.title)}
+                />
               ))}
             </div>
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">AI Learning Assistant</h2>
-            <AIChat />
+            {selectedModule ? (
+              <>
+                <h2 className="text-xl font-semibold">AI Learning Assistant</h2>
+                <AIChat moduleTitle={selectedModule} />
+              </>
+            ) : (
+              <div className="h-full flex items-center justify-center">
+                <p className="text-muted-foreground text-center">
+                  Select a module to start a conversation with the AI Learning Assistant
+                </p>
+              </div>
+            )}
           </section>
         </div>
       </div>

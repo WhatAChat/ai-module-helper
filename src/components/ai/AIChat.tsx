@@ -12,8 +12,18 @@ interface Message {
   sender: "user" | "ai";
 }
 
-export function AIChat() {
-  const [messages, setMessages] = useState<Message[]>([]);
+interface AIChatProps {
+  moduleTitle: string;
+}
+
+export function AIChat({ moduleTitle }: AIChatProps) {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: Date.now(),
+      text: `Welcome! I'm here to help you with the "${moduleTitle}" module. What would you like to know?`,
+      sender: "ai",
+    },
+  ]);
   const [input, setInput] = useState("");
 
   const handleSend = () => {
@@ -31,7 +41,7 @@ export function AIChat() {
         ...prev,
         {
           id: Date.now(),
-          text: "I'm here to help you with your learning journey. What would you like to know about the current module?",
+          text: `I can help you understand concepts from the "${moduleTitle}" module. What specific topic would you like to explore?`,
           sender: "ai",
         },
       ]);
@@ -66,7 +76,7 @@ export function AIChat() {
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about your current module..."
+          placeholder={`Ask about the ${moduleTitle} module...`}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
           className="flex-1"
         />

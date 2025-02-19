@@ -5,11 +5,22 @@ interface ModuleCardProps {
   title: string;
   description: string;
   progress?: number;
+  isSelected?: boolean;
+  onClick?: () => void;
 }
 
-export function ModuleCard({ title, description, progress = 0 }: ModuleCardProps) {
+export function ModuleCard({ 
+  title, 
+  description, 
+  progress = 0,
+  isSelected = false,
+  onClick 
+}: ModuleCardProps) {
   return (
-    <Card className="hover-card">
+    <Card 
+      className={`hover-card cursor-pointer ${isSelected ? 'ring-2 ring-primary' : ''}`}
+      onClick={onClick}
+    >
       <CardHeader>
         <CardTitle className="text-lg">{title}</CardTitle>
       </CardHeader>
