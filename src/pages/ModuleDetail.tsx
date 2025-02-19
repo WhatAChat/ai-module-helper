@@ -1,11 +1,12 @@
-
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { AIChat } from "@/components/ai/AIChat";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { MessageCircle, X } from "lucide-react";
 
-// Mock data for module content
 const moduleContents = {
   "Introduction to Programming": {
     content: `
@@ -67,6 +68,7 @@ const moduleContents = {
 const ModuleDetail = () => {
   const { moduleId } = useParams();
   const moduleData = moduleContents[moduleId as keyof typeof moduleContents];
+  const [isAIOpen, setIsAIOpen] = useState(false);
 
   if (!moduleData) {
     return (
@@ -83,16 +85,16 @@ const ModuleDetail = () => {
 
   return (
     <AppLayout>
-      <div className="space-y-8 animate-fade-in">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="relative h-[calc(100vh-2rem)] animate-fade-in">
+        <div className="flex h-full">
           {/* Module Content */}
-          <section className="space-y-4">
-            <Card>
+          <div className={`transition-all duration-300 ${isAIOpen ? 'w-3/4' : 'w-full'}`}>
+            <Card className="h-full">
               <CardHeader>
                 <CardTitle>{moduleId}</CardTitle>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-[600px] pr-4">
+                <ScrollArea className="h-[calc(100vh-12rem)] pr-4">
                   <div className="prose prose-sm max-w-none">
                     <div className="space-y-6">
                       {moduleData.content.split('\n').map((line, index) => {
@@ -115,13 +117,32 @@ const ModuleDetail = () => {
                 </ScrollArea>
               </CardContent>
             </Card>
-          </section>
+          </div>
 
           {/* AI Assistant */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold">AI Learning Assistant</h2>
-            <AIChat moduleTitle={moduleId || ""} />
-          </section>
+          {isAIOpen ? (
+            <div className="w-1/4 h-full transition-all duration-300 border-l">
+              <div className="h-full flex flex-col">
+                <div className="p-4 border-b flex justify-between items-center">
+                  <h2 className="text-xl font-semibold">AI Learning Assistant</h2>
+                  <Button variant="ghost" size="icon" onClick={() => setIsAIOpen(false)}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex-1">
+                  <AIChat moduleTitle={moduleId || ""} />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Button
+              className="fixed bottom-6 right-6 rounded-full shadow-lg"
+              size="icon"
+              onClick={() => setIsAIOpen(true)}
+            >
+              <MessageCircle className="h-5 w-5" />
+            </Button>
+          )}
         </div>
       </div>
     </AppLayout>

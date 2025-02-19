@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send } from "lucide-react";
 
@@ -49,29 +48,27 @@ export function AIChat({ moduleTitle }: AIChatProps) {
   };
 
   return (
-    <div className="h-[600px] flex flex-col">
-      <Card className="flex-1">
-        <ScrollArea className="h-[500px] p-4">
-          {messages.map((message) => (
+    <div className="h-full flex flex-col p-4">
+      <ScrollArea className="flex-1 pr-4">
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`mb-4 ${
+              message.sender === "user" ? "text-right" : "text-left"
+            }`}
+          >
             <div
-              key={message.id}
-              className={`mb-4 ${
-                message.sender === "user" ? "text-right" : "text-left"
+              className={`inline-block max-w-[85%] px-4 py-2 rounded-lg ${
+                message.sender === "user"
+                  ? "bg-primary text-white"
+                  : "bg-gray-100"
               }`}
             >
-              <div
-                className={`inline-block max-w-md px-4 py-2 rounded-lg ${
-                  message.sender === "user"
-                    ? "bg-primary text-white"
-                    : "bg-gray-100"
-                }`}
-              >
-                {message.text}
-              </div>
+              {message.text}
             </div>
-          ))}
-        </ScrollArea>
-      </Card>
+          </div>
+        ))}
+      </ScrollArea>
       <div className="flex gap-2 mt-4">
         <Input
           value={input}
