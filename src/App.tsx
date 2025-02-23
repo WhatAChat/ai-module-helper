@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import ModuleDetail from "./pages/ModuleDetail";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/login";
+import { RoleBasedLayout } from "./components/layout/RoleBasedLayout";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   }
 
-  return authenticated ? children : <Navigate to="/login" />;
+  return authenticated ? <RoleBasedLayout>{children}</RoleBasedLayout> : <Navigate to="/login" />;
 };
 
 const App = () => (
